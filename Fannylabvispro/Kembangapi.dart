@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'Warna.dart' as color;
 
 final Map<String, List<String>> fireworkFrame = {
@@ -32,12 +33,12 @@ final Map<String, List<String>> fireworkFrame = {
     '       *        ',
   ],
   '4': [
-    // Frame 4: Ledakan penuh
-    '      * * *      ',
-    '   * * * * * *   ',
-    ' * * * * * * * * ',
-    '   * * * * * *   ',
-    '      * * *      ',
+    // Frame 4: Ledakan penuh (kucing)
+    '      /\\_/\\      ',
+    '     ( o  o  )     ',
+    '     (  =^=  )    ',
+    '      \\~(*)~/     ',
+    '      /     \\      ',
   ],
   '5': [
     // Frame 5: Ekspansi ledakan
@@ -93,6 +94,16 @@ void changeBackground(String colorSelect) {
   clearScreen();
 }
 
+// Function to hide cursor
+void hideCursor() {
+  stdout.write('\x1B[?25l');
+}
+
+// Function to show cursor
+void showCursor() {
+  stdout.write('\x1B[?25h');
+}
+
 // Define the delay function
 Future<void> delay(int milliseconds) async {
   await Future.delayed(Duration(milliseconds: milliseconds));
@@ -101,6 +112,8 @@ Future<void> delay(int milliseconds) async {
 Future<void> kembangApi(
     int centerX, int centerY, List<String> colorSelects) async {
   String fontColor = colorSelects[1];
+
+  hideCursor(); // Hide cursor at the beginning
 
   // Frame 1: Meluncur ke atas
   for (int i = 1; i <= 5; i++) {
@@ -125,7 +138,7 @@ Future<void> kembangApi(
   printFireworkFrame('3', centerX, centerY, colorSelects);
   await delay(100); // Delay untuk efek ledakan
 
-  // Frame 4: Ledakan penuh
+  // Frame 4: Ledakan penuh (kucing)
   changeBackground(bgColor);
   clearScreen();
   printFireworkFrame('4', centerX, centerY, colorSelects);
@@ -142,4 +155,14 @@ Future<void> kembangApi(
   clearScreen();
   printFireworkFrame('6', centerX, centerY, colorSelects);
   await delay(100); // Delay untuk menampilkan efek memudar
+
+  showCursor(); // Show cursor at the end
+}
+
+void main() async {
+  int centerX = 40; // Posisi horizontal kembang api
+  int centerY = 20; // Posisi vertical kembang api
+  List<String> colorSelects = [color.BLACK, color.YELLOW]; // Pilihan warna
+
+  await kembangApi(centerX, centerY, colorSelects);
 }
